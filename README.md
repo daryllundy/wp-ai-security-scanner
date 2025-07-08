@@ -4,7 +4,8 @@ An AI-powered WordPress security scanner with intelligent threat detection and a
 
 ## Features
 
-- **AI-Powered Malware Detection**: Machine learning algorithms for advanced threat identification
+- **AI-Powered Malware Detection**: Local ML algorithms + OpenAI GPT-4 integration for advanced threat identification
+- **VirusTotal Integration**: Cross-reference file hashes with global malware database
 - **Real-Time File Scanning**: Comprehensive file system analysis with pattern matching
 - **Automated Quarantine System**: Safe isolation of malicious files with backup restoration
 - **Behavioral Analysis**: Detection of suspicious code patterns and anomalies
@@ -24,6 +25,42 @@ An AI-powered WordPress security scanner with intelligent threat detection and a
 - PHP 7.4 or higher
 - MySQL 5.7 or higher
 - 256MB RAM (recommended)
+
+## API Integration Setup (Optional)
+
+The plugin supports optional AI-powered analysis through external APIs:
+
+### OpenAI Integration
+
+1. Get an API key from [OpenAI Platform](https://platform.openai.com/api-keys)
+2. Go to **AI Security Scanner** → **Settings**
+3. Enable "OpenAI Integration"
+4. Enter your API key
+5. Click "Test API Key" to verify
+
+**Benefits:**
+- Advanced code analysis with GPT-4
+- Natural language threat descriptions
+- Context-aware malware detection
+- Enhanced zero-day threat identification
+
+**Cost:** ~$0.01-0.03 per file analyzed (pay-per-use)
+
+### VirusTotal Integration
+
+1. Get a free API key from [VirusTotal](https://www.virustotal.com/gui/join-us)
+2. Go to **AI Security Scanner** → **Settings**
+3. Enable "VirusTotal Integration"
+4. Enter your API key
+5. Click "Test API Key" to verify
+
+**Benefits:**
+- Hash-based malware verification
+- Global threat intelligence database
+- Multi-engine malware detection
+- Known threat identification
+
+**Limits:** Free tier includes 1000 requests/day
 
 ## Usage
 
@@ -49,6 +86,8 @@ Go to **AI Security Scanner** → **Settings** to configure:
 - Email notifications
 - Scan frequency
 - File size limits
+- OpenAI API integration
+- VirusTotal API integration
 
 ## Security Features
 
@@ -157,21 +196,30 @@ wp-ai-security-scanner/
 - Behavioral pattern recognition
 
 ### AI-Powered Features
-- Anomaly detection
-- Confidence scoring
-- False positive reduction
-- Pattern learning
-- Behavioral analysis
-- Zero-day threat detection
+- **Local ML algorithms**: Entropy analysis and pattern recognition
+- **OpenAI GPT-4 integration**: Advanced code analysis with natural language understanding
+- **VirusTotal API**: Hash-based malware verification with global threat intelligence
+- **Anomaly detection**: Statistical analysis of file behavior
+- **Confidence scoring**: Multi-source threat validation
+- **False positive reduction**: AI-assisted accuracy improvement
+- **Zero-day threat detection**: Unknown malware identification
 
 ## Security Considerations
 
-- All data processing occurs locally
-- Encrypted storage of sensitive results
-- Role-based access control
-- Secure API communications
-- Input sanitization and CSRF protection
-- Audit logging
+- **Local processing**: Primary analysis occurs locally for privacy
+- **API Security**: Secure API communications with OpenAI and VirusTotal (optional)
+- **Data Protection**: Encrypted storage of sensitive results and API keys
+- **Access Control**: Role-based access control with WordPress capabilities
+- **Input Validation**: Comprehensive sanitization and CSRF protection
+- **Audit Logging**: Complete activity tracking for security events
+
+### API Integration Security
+
+- **API Keys**: Stored securely in WordPress options with encryption
+- **Rate Limiting**: Automatic throttling to prevent API abuse
+- **Error Handling**: Graceful degradation when APIs are unavailable
+- **Privacy**: File contents sent to APIs only when locally flagged as suspicious
+- **Validation**: Real-time API key validation and testing
 
 ## License
 

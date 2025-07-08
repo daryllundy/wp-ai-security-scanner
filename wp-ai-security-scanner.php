@@ -56,6 +56,8 @@ class WP_AI_Security_Scanner {
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
         add_action('wp_ajax_start_scan', array($this, 'ajax_start_scan'));
         add_action('wp_ajax_get_scan_progress', array($this, 'ajax_get_scan_progress'));
+        add_action('wp_ajax_test_openai_key', array($this, 'ajax_test_openai_key'));
+        add_action('wp_ajax_test_virustotal_key', array($this, 'ajax_test_virustotal_key'));
     }
     
     public function add_admin_menu() {
@@ -150,6 +152,60 @@ class WP_AI_Security_Scanner {
         wp_send_json_success($progress);
     }
     
+    public function ajax_test_openai_key() {
+        check_ajax_referer('wp_ai_scanner_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_die('Unauthorized');
+        }
+        
+        $api_key = sanitize_text_field($_POST['api_key']);
+        
+        if (empty($api_key)) {
+            wp_send_json_error('API key is required');
+        }
+        
+        if (!class_exists('WP_AI_Security_Scanner_Malware_Detector')) {
+            wp_send_json_error('Malware detector class not found');
+        }
+        
+        $detector = new WP_AI_Security_Scanner_Malware_Detector();
+        $is_valid = $detector->validate_openai_api_key($api_key);
+        
+        if ($is_valid) {
+            wp_send_json_success('OpenAI API key is valid');
+        } else {
+            wp_send_json_error('Invalid OpenAI API key');
+        }
+    }
+    
+    public function ajax_test_virustotal_key() {
+        check_ajax_referer('wp_ai_scanner_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_die('Unauthorized');
+        }
+        
+        $api_key = sanitize_text_field($_POST['api_key']);
+        
+        if (empty($api_key)) {
+            wp_send_json_error('API key is required');
+        }
+        
+        if (!class_exists('WP_AI_Security_Scanner_Malware_Detector')) {
+            wp_send_json_error('Malware detector class not found');
+        }
+        
+        $detector = new WP_AI_Security_Scanner_Malware_Detector();
+        $is_valid = $detector->validate_virustotal_api_key($api_key);
+        
+        if ($is_valid) {
+            wp_send_json_success('VirusTotal API key is valid');
+        } else {
+            wp_send_json_error('Invalid VirusTotal API key');
+        }
+    }
+    
     public function activate() {
         $database = new WP_AI_Security_Scanner_Database();
         $database->create_tables();
@@ -162,7 +218,11 @@ class WP_AI_Security_Scanner {
             'max_file_size' => 10485760, // 10MB
             'email_notifications' => true,
             'notification_email' => get_option('admin_email'),
-            'scan_frequency' => 'daily'
+            'scan_frequency' => 'daily',
+            'use_openai' => false,
+            'openai_api_key' => '',
+            'use_virustotal' => false,
+            'virustotal_api_key' => ''
         );
         
         add_option('wp_ai_security_scanner_settings', $default_settings);

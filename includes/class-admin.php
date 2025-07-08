@@ -267,6 +267,74 @@ class WP_AI_Security_Scanner_Admin {
                     </tr>
                 </table>
                 
+                <h2>AI-Powered Detection</h2>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row">OpenAI Integration</th>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="use_openai" value="1" <?php 
+                                    checked(isset($settings['use_openai']) ? $settings['use_openai'] : false); 
+                                ?>>
+                                Enable OpenAI-powered malware detection
+                            </label>
+                            <p class="description">Uses GPT-4 to analyze suspicious code patterns. Requires OpenAI API key.</p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">OpenAI API Key</th>
+                        <td>
+                            <input type="password" name="openai_api_key" value="<?php 
+                                echo esc_attr(isset($settings['openai_api_key']) ? $settings['openai_api_key'] : ''); 
+                            ?>" class="regular-text" placeholder="sk-...">
+                            <p class="description">Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI Platform</a>. Keep this secure!</p>
+                            <?php if (isset($settings['openai_api_key']) && !empty($settings['openai_api_key'])): ?>
+                                <button type="button" class="button" id="test-openai-key">Test API Key</button>
+                                <span id="openai-test-result"></span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">VirusTotal Integration</th>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="use_virustotal" value="1" <?php 
+                                    checked(isset($settings['use_virustotal']) ? $settings['use_virustotal'] : false); 
+                                ?>>
+                                Enable VirusTotal malware database lookup
+                            </label>
+                            <p class="description">Cross-references file hashes with VirusTotal's malware database. Requires VirusTotal API key.</p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">VirusTotal API Key</th>
+                        <td>
+                            <input type="password" name="virustotal_api_key" value="<?php 
+                                echo esc_attr(isset($settings['virustotal_api_key']) ? $settings['virustotal_api_key'] : ''); 
+                            ?>" class="regular-text" placeholder="your_api_key_here">
+                            <p class="description">Get your API key from <a href="https://www.virustotal.com/gui/join-us" target="_blank">VirusTotal</a>. Free tier includes 1000 requests/day.</p>
+                            <?php if (isset($settings['virustotal_api_key']) && !empty($settings['virustotal_api_key'])): ?>
+                                <button type="button" class="button" id="test-virustotal-key">Test API Key</button>
+                                <span id="virustotal-test-result"></span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">API Usage Limits</th>
+                        <td>
+                            <p class="description">
+                                <strong>OpenAI:</strong> Pay-per-use. GPT-4 Turbo costs ~$0.01-0.03 per file analyzed.<br>
+                                <strong>VirusTotal:</strong> Free tier: 1000 requests/day. Paid plans available for higher limits.<br>
+                                <em>API calls are only made for files that trigger local heuristic detection.</em>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                
                 <?php submit_button(); ?>
             </form>
         </div>
@@ -280,7 +348,11 @@ class WP_AI_Security_Scanner_Admin {
             'max_file_size' => intval($_POST['max_file_size']),
             'email_notifications' => isset($_POST['email_notifications']),
             'notification_email' => sanitize_email($_POST['notification_email']),
-            'scan_frequency' => sanitize_text_field($_POST['scan_frequency'])
+            'scan_frequency' => sanitize_text_field($_POST['scan_frequency']),
+            'use_openai' => isset($_POST['use_openai']),
+            'openai_api_key' => sanitize_text_field($_POST['openai_api_key']),
+            'use_virustotal' => isset($_POST['use_virustotal']),
+            'virustotal_api_key' => sanitize_text_field($_POST['virustotal_api_key'])
         );
         
         update_option('wp_ai_security_scanner_settings', $settings);

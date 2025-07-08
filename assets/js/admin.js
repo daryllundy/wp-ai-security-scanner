@@ -304,6 +304,17 @@ jQuery(document).ready(function($) {
         }
     }, 30000);
     
+    // API key testing functionality
+    $('#test-openai-key').on('click', function(e) {
+        e.preventDefault();
+        testApiKey('openai');
+    });
+    
+    $('#test-virustotal-key').on('click', function(e) {
+        e.preventDefault();
+        testApiKey('virustotal');
+    });
+    
     function refreshThreatCounts() {
         $.ajax({
             url: wpAiScannerAjax.ajax_url,
@@ -343,6 +354,43 @@ jQuery(document).ready(function($) {
             },
             error: function() {
                 console.log('Error refreshing threat counts');
+            }
+        });
+    }
+    
+    function testApiKey(provider) {
+        const button = $('#test-' + provider + '-key');
+        const result = $('#' + provider + '-test-result');
+        const apiKey = $('input[name="' + provider + '_api_key"]').val();
+        
+        if (!apiKey) {
+            result.html('<span style="color: #d63638;">Please enter an API key first</span>');
+            return;
+        }
+        
+        button.prop('disabled', true).text('Testing...');
+        result.html('<span style="color: #0073aa;">Testing API key...</span>');
+        
+        $.ajax({
+            url: wpAiScannerAjax.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'test_' + provider + '_key',
+                nonce: wpAiScannerAjax.nonce,
+                api_key: apiKey
+            },
+            success: function(response) {
+                if (response.success) {
+                    result.html('<span style="color: #00a32a;">✓ ' + response.data + '</span>');
+                } else {
+                    result.html('<span style="color: #d63638;">✗ ' + response.data + '</span>');
+                }
+            },
+            error: function() {
+                result.html('<span style="color: #d63638;">✗ Connection error</span>');
+            },
+            complete: function() {
+                button.prop('disabled', false).text('Test API Key');
             }
         });
     }
