@@ -56,17 +56,23 @@ cd demo
 
 ### Demo Malware Files
 
-The environment includes 9 sample threat files in `/wp-content/sample-threats/`:
+The environment includes 12 comprehensive sample threat files in `/wp-content/sample-threats/`:
 
+#### Basic Threats
 1. **eval-backdoor.php** - Base64 encoded eval patterns
-2. **file-inclusion.php** - File inclusion vulnerabilities
+2. **file-inclusion.php** - File inclusion vulnerabilities  
 3. **shell-execution.php** - Shell command execution
 4. **c99-shell.php** - Common backdoor shell patterns
-5. **crypto-miner.php** - Cryptocurrency mining code
-6. **obfuscated-malware.php** - Heavy obfuscation techniques
-7. **sql-injection.php** - SQL injection patterns
-8. **wordpress-exploit.php** - WordPress-specific attacks
-9. **clean-file.php** - Safe file (should not be detected)
+5. **sql-injection.php** - SQL injection patterns
+6. **wordpress-exploit.php** - WordPress-specific attacks
+7. **obfuscated-malware.php** - Heavy obfuscation techniques
+8. **clean-file.php** - Safe file (should not be detected)
+
+#### Advanced Threats
+9. **crypto-miner.php** - Comprehensive cryptocurrency mining (CoinHive, WebAssembly, hidden iframes)
+10. **advanced-backdoor.php** - Multi-stage backdoor with 12 evasion techniques
+11. **php-injection-suite.php** - 20 different injection attack vectors
+12. **modern-malware-techniques.php** - Contemporary threats (fileless, anti-sandbox, persistence)
 
 ## Demo Scenarios
 
@@ -75,9 +81,10 @@ The environment includes 9 sample threat files in `/wp-content/sample-threats/`:
 1. Navigate to **AI Security Scanner** → **Dashboard**
 2. Click **Start Full Scan**
 3. **Expected Results**:
-   - 8 threats detected in `/wp-content/sample-threats/`
-   - Various severity levels (Critical, High, Medium)
-   - Confidence scores between 0.6-0.9
+   - 11+ threats detected in `/wp-content/sample-threats/`
+   - Various severity levels (Critical, High, Medium, Low)
+   - Confidence scores between 0.5-0.95
+   - Multiple detection sources (Local, OpenAI, VirusTotal if configured)
 
 ### Scenario 2: Quick Scan
 
@@ -105,7 +112,19 @@ The environment includes 9 sample threat files in `/wp-content/sample-threats/`:
    - Original file backed up securely
    - Status updated to "Quarantined"
 
-### Scenario 5: Settings Configuration
+### Scenario 5: AI Integration Testing
+
+1. Go to **AI Security Scanner** → **Settings**
+2. **Configure AI APIs** (optional):
+   - Enable OpenAI integration
+   - Enter OpenAI API key (sk-...)
+   - Test API key connection
+   - Enable VirusTotal integration  
+   - Enter VirusTotal API key
+   - Test API key connection
+3. **Run enhanced scan** with AI analysis
+
+### Scenario 6: Settings Configuration
 
 1. Go to **AI Security Scanner** → **Settings**
 2. **Configure options**:
@@ -113,6 +132,7 @@ The environment includes 9 sample threat files in `/wp-content/sample-threats/`:
    - File extensions
    - Email notifications
    - Scan frequency
+   - AI-powered detection settings
 
 ## Technical Details
 
