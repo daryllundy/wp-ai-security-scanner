@@ -89,12 +89,12 @@ WordPress AI Security Scanner combines traditional security scanning with artifi
 ### Plugin Architecture
 
 **Core Components:**
-1. **Scanner Engine** - Multi-threaded scanning with queue management
-2. **AI Analysis Module** - Local ML inference with cloud API fallback
+1. **Scanner Engine** - File scanning with queue management and progress tracking
+2. **AI Analysis Module** - 5-layer detection pipeline with local heuristics + cloud API fallback
 3. **Database Layer** - Custom tables for scan results and configuration
-4. **Admin Interface** - React-based dashboard with REST API backend
-5. **Notification System** - Email, SMS, and in-dashboard alerts
-6. **Update Mechanism** - Automatic security definition updates
+4. **Admin Interface** - jQuery-based dashboard with AJAX backend
+5. **Notification System** - Email and in-dashboard alerts
+6. **ML Training Pipeline** - Python-based model training for enhanced detection (see `/ml` directory)
 
 **Security Considerations:**
 - All data processing occurs locally (privacy-first approach)
@@ -105,17 +105,24 @@ WordPress AI Security Scanner combines traditional security scanning with artifi
 
 ### AI/ML Specifications
 
-**Machine Learning Models:**
-- **Malware Detection Model:** Trained on 100k+ malware samples
-- **Anomaly Detection:** Behavioral analysis using clustering algorithms
-- **Vulnerability Assessment:** Static code analysis with ML classification
-- **False Positive Reduction:** Feedback loop for model improvement
+**Current Implementation (PHP Runtime):**
+- **Entropy Analysis:** Shannon entropy calculation for obfuscation detection
+- **Behavioral Scoring:** Cumulative risk scoring based on suspicious patterns
+- **Heuristic Analysis:** Rule-based detection of dangerous functions and patterns
+- **External APIs:** OpenAI GPT-4 and VirusTotal integration (optional)
 
-**Model Deployment:**
-- Lightweight models for local inference (< 50MB)
-- Cloud API for heavy computational tasks
-- Offline capability with reduced functionality
-- Model versioning and automatic updates
+**ML Training Pipeline (Python - `/ml` directory):**
+- **Feature Engineering:** 100+ features extracted from PHP code
+- **Supported Models:** Random Forest, XGBoost, Neural Network (MLP)
+- **Model Export:** ONNX format for cross-platform inference
+- **Inference Server:** Flask-based REST API for predictions
+
+**Detection Pipeline:**
+1. Layer 1: Signature-based pattern matching
+2. Layer 2: Heuristic analysis of dangerous functions
+3. Layer 3: Statistical analysis (entropy, obfuscation scoring)
+4. Layer 4: OpenAI GPT-4 analysis (optional)
+5. Layer 5: VirusTotal hash verification (optional)
 
 ### Performance Requirements
 
