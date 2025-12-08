@@ -13,11 +13,12 @@ Phase 1 implementation is complete with full plugin functionality, comprehensive
 ## Technical Architecture
 
 ### Core Components
-- **Scanner Engine** - Multi-threaded scanning with queue management
-- **AI Analysis Module** - Local ML inference with cloud API fallback  
+- **Scanner Engine** - File scanning with queue management and progress tracking
+- **AI Analysis Module** - 5-layer detection pipeline (signatures → heuristics → statistics → OpenAI → VirusTotal)
 - **Database Layer** - Custom tables for scan results and configuration
-- **Admin Interface** - React-based dashboard with REST API backend
-- **Notification System** - Email, SMS, and in-dashboard alerts
+- **Admin Interface** - jQuery-based dashboard with AJAX backend
+- **Notification System** - Email and in-dashboard alerts
+- **ML Training Pipeline** - Python-based model training (see `/ml` directory)
 
 ### WordPress Plugin Structure
 - Standard WordPress plugin architecture following WordPress coding standards
@@ -28,18 +29,20 @@ Phase 1 implementation is complete with full plugin functionality, comprehensive
 
 ### Technology Stack
 - **Backend:** PHP 7.4+ (WordPress plugin)
-- **Frontend:** React-based admin dashboard
+- **Frontend:** jQuery-based admin dashboard with AJAX
 - **Database:** MySQL 5.7+ with custom tables
-- **AI/ML:** Lightweight models for local inference
+- **AI/ML (PHP):** Entropy analysis, heuristic scoring, behavioral patterns
+- **AI/ML (Python):** scikit-learn, XGBoost, TensorFlow (training pipeline in `/ml`)
+- **External APIs:** OpenAI GPT-4, VirusTotal (optional)
 - **Security:** AES-256 encryption, SSL/TLS communications
 
 ## Key Features (Implemented)
 
-1. **AI-Powered Malware Detection** - ML models trained on malware patterns
-2. **Smart Vulnerability Scanning** - OWASP Top 10 vulnerability detection
-3. **File Integrity Monitoring** - Real-time file change detection with AI analysis
-4. **Behavioral Analytics** - User behavior anomaly detection
-5. **Automated Security Hardening** - One-click security fixes
+1. **AI-Powered Malware Detection** - 5-layer detection pipeline with entropy analysis, heuristics, and optional cloud AI
+2. **Smart Vulnerability Scanning** - Pattern-based detection of OWASP vulnerabilities
+3. **File Integrity Monitoring** - Hash-based file change detection with confidence scoring
+4. **Behavioral Analysis** - Code behavior pattern recognition (WordPress DB manipulation, admin creation, etc.)
+5. **Automated Quarantine System** - Safe file isolation with backup and restoration
 
 ## Performance Requirements
 
@@ -68,7 +71,14 @@ Phase 1 implementation is complete with full plugin functionality, comprehensive
 This project demonstrates advanced WordPress plugin development skills including:
 - Custom database schema design
 - Background processing and queue management
-- REST API development
-- React integration within WordPress admin
-- Security best practices implementation
-- Machine learning model integration
+- AJAX-based admin interface development
+- Security best practices implementation (nonces, prepared statements, sanitization)
+- Machine learning pipeline development (Python training + PHP inference)
+- External API integration (OpenAI, VirusTotal)
+- Comprehensive test suite (180+ tests with 1:1 test-to-code ratio)
+
+## Documentation
+
+- `docs/ML_ARCHITECTURE.md` - ML system design and pipeline documentation
+- `docs/ALGORITHM_DOCUMENTATION.md` - Detailed detection algorithm documentation
+- `ml/README.md` - Python ML training pipeline documentation
