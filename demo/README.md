@@ -42,7 +42,7 @@ cd demo
 
 ### Services
 
-- **WordPress 6.4** (PHP 8.2-FPM)
+- **WordPress 6.7** (PHP 8.2-FPM)
 - **MySQL 8.0** database
 - **Nginx** web server
 - **phpMyAdmin** for database management
@@ -144,8 +144,9 @@ demo/
 ├── nginx.conf             # Nginx configuration
 ├── default.conf           # Virtual host config
 ├── uploads.ini            # PHP upload settings
-├── sample-threats/        # Demo malware files
+├── sample-threats/        # Demo malware files (12 samples)
 ├── start-demo.sh         # Demo startup script
+├── stop-demo.sh          # Demo shutdown script
 └── README.md             # This file
 ```
 
@@ -240,11 +241,15 @@ docker system prune -f
 When finished with the demo:
 
 ```bash
-# Stop services
-docker-compose down
+# Stop services (preserves data)
+./stop-demo.sh
 
-# Remove volumes (optional)
-docker-compose down -v
+# Stop services and remove all data
+./stop-demo.sh -v
+
+# Or use docker-compose directly
+docker-compose down        # Stop containers
+docker-compose down -v     # Stop and remove volumes
 
 # Remove images (optional)
 docker rmi $(docker images -q)

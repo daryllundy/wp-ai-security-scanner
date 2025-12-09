@@ -25,19 +25,47 @@ fi
 echo "📦 Starting Docker containers..."
 docker-compose up -d
 
-# Wait for services to be ready
-echo "⏳ Waiting for services to start..."
-sleep 15
+# Wait for MySQL to be healthy
+echo "⏳ Waiting for MySQL to be ready..."
+timeout=60
+elapsed=0
+while [ $elapsed -lt $timeout ]; do
+    if docker-compose ps mysql | grep -q "healthy"; then
+        echo "✅ MySQL is healthy!"
+        break
+    fi
+    sleep 2
+    elapsed=$((elapsed + 2))
+    printf "."
+done
+echo ""
 
-# Check if WordPress is responding
-echo "🔍 Checking service health..."
-if curl -s http://localhost:8080 > /dev/null; then
-    echo "✅ WordPress is ready!"
-else
+if [ $elapsed -ge $timeout ]; then
+    echo "⚠️  MySQL health check timed out, continuing anyway..."
+fi
+
+# Wait for WordPress to respond
+echo "⏳ Waiting for WordPress to start..."
+timeout=30
+elapsed=0
+while [ $elapsed -lt $timeout ]; do
+    if curl -s -o /dev/null -w "%{http_code}" http://localhost:8080 2>/dev/null | grep -qE "200|302|301"; then
+        echo "✅ WordPress is ready!"
+        break
+    fi
+    sleep 2
+    elapsed=$((elapsed + 2))
+    printf "."
+done
+echo ""
+
+if [ $elapsed -ge $timeout ]; then
     echo "⚠️  WordPress may still be starting up..."
 fi
 
-if curl -s http://localhost:8081 > /dev/null; then
+# Check phpMyAdmin
+echo "🔍 Checking phpMyAdmin..."
+if curl -s -o /dev/null http://localhost:8081 2>/dev/null; then
     echo "✅ phpMyAdmin is ready!"
 else
     echo "⚠️  phpMyAdmin may still be starting up..."
@@ -61,11 +89,11 @@ echo "   3. Navigate to 'AI Security Scanner' in the admin menu"
 echo "   4. Run your first security scan!"
 echo ""
 echo "🔍 Demo Features:"
-echo "   - 9 sample threat files in wp-content/sample-threats/"
+echo "   - 12 sample threat files in wp-content/sample-threats/"
 echo "   - Real-time scanning with progress updates"
 echo "   - Threat detection and quarantine capabilities"
 echo "   - Comprehensive admin dashboard"
 echo ""
 echo "📖 For detailed instructions, see demo/README.md"
 echo ""
-echo "🛑 To stop the demo: docker-compose down"
+echo "🛑 To stop the demo: ./stop-demo.sh"
