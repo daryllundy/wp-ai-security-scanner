@@ -90,11 +90,10 @@ WordPress AI Security Scanner combines traditional security scanning with artifi
 
 **Core Components:**
 1. **Scanner Engine** - File scanning with queue management and progress tracking
-2. **AI Analysis Module** - 5-layer detection pipeline with local heuristics + cloud API fallback
+2. **AI Analysis Module** - Multi-layer detection pipeline with local heuristics + cloud API fallback
 3. **Database Layer** - Custom tables for scan results and configuration
 4. **Admin Interface** - jQuery-based dashboard with AJAX backend
 5. **Notification System** - Email and in-dashboard alerts
-6. **ML Training Pipeline** - Python-based model training for enhanced detection (see `/ml` directory)
 
 **Security Considerations:**
 - All data processing occurs locally (privacy-first approach)
@@ -105,22 +104,16 @@ WordPress AI Security Scanner combines traditional security scanning with artifi
 
 ### AI/ML Specifications
 
-**Current Implementation (PHP Runtime):**
+**Detection Implementation:**
 - **Entropy Analysis:** Shannon entropy calculation for obfuscation detection
 - **Behavioral Scoring:** Cumulative risk scoring based on suspicious patterns
 - **Heuristic Analysis:** Rule-based detection of dangerous functions and patterns
 - **External APIs:** OpenAI GPT-4 and VirusTotal integration (optional)
 
-**ML Training Pipeline (Python - `/ml` directory):**
-- **Feature Engineering:** 100+ features extracted from PHP code
-- **Supported Models:** Random Forest, XGBoost, Neural Network (MLP)
-- **Model Export:** ONNX format for cross-platform inference
-- **Inference Server:** Flask-based REST API for predictions
-
 **Detection Pipeline:**
 1. Layer 1: Signature-based pattern matching
 2. Layer 2: Heuristic analysis of dangerous functions
-3. Layer 3: Statistical analysis (entropy, obfuscation scoring)
+3. Layer 3: Statistical analysis (entropy, obfuscation scoring, behavioral patterns)
 4. Layer 4: OpenAI GPT-4 analysis (optional)
 5. Layer 5: VirusTotal hash verification (optional)
 
