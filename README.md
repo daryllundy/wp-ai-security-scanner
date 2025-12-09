@@ -120,7 +120,6 @@ The plugin follows WordPress coding standards and uses:
 - **Custom Database Tables**: Optimized storage for scan results
 - **jQuery-based Admin UI**: Responsive AJAX interface with real-time updates
 - **Cron Integration**: Scheduled background scanning
-- **ML Training Pipeline**: Python-based machine learning for enhanced detection (see `/ml` directory)
 
 ### Database Schema
 
@@ -160,22 +159,13 @@ wp-ai-security-scanner/
 ├── includes/
 │   ├── class-database.php        # Database operations
 │   ├── class-scanner.php         # File scanning engine
-│   ├── class-malware-detector.php # Threat detection (5-layer pipeline)
+│   ├── class-malware-detector.php # Threat detection (multi-layer pipeline)
 │   ├── class-admin.php           # Admin interface
 │   └── class-security-features.php # Security operations
 ├── assets/
 │   ├── css/admin.css             # Admin styling
 │   └── js/admin.js               # jQuery-based admin interface
-├── ml/                           # Machine Learning Pipeline
-│   ├── training/                 # Model training scripts
-│   │   ├── feature_extraction.py # PHP code feature engineering
-│   │   ├── train_classifier.py   # Model training
-│   │   └── evaluation.py         # Model evaluation
-│   ├── inference/                # Inference server
-│   │   └── inference_server.py   # REST API for predictions
-│   └── README.md                 # ML pipeline documentation
 ├── docs/
-│   ├── ML_ARCHITECTURE.md        # ML system design documentation
 │   └── ALGORITHM_DOCUMENTATION.md # Detection algorithm details
 ├── demo/
 │   ├── sample-threats/           # 12 realistic malware samples
@@ -212,19 +202,13 @@ wp-ai-security-scanner/
 
 ### AI-Powered Features
 
-**Current Implementation (PHP Runtime):**
+**Detection Capabilities:**
 - **Entropy Analysis**: Shannon entropy calculation to detect encrypted/obfuscated code
 - **Behavioral Scoring**: Cumulative risk scoring based on suspicious patterns
 - **Obfuscation Detection**: Multi-factor scoring for code obfuscation
 - **OpenAI GPT-4 Integration**: Advanced code analysis with natural language understanding (optional)
 - **VirusTotal API**: Hash-based malware verification with 70+ antivirus engines (optional)
 - **Confidence Scoring**: Multi-source threat validation with severity ranking
-
-**ML Training Pipeline (Python - see `/ml` directory):**
-- **Feature Engineering**: 100+ features extracted from PHP code
-- **Model Training**: Random Forest, XGBoost, and Neural Network classifiers
-- **Model Export**: ONNX format for cross-platform inference
-- **REST API Server**: Flask-based inference server for integration
 
 ## Security Considerations
 
