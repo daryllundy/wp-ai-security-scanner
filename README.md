@@ -123,11 +123,12 @@ The plugin follows WordPress coding standards and uses:
 
 ### Database Schema
 
-The plugin creates three custom tables:
+The plugin creates four custom tables:
 
 - `wp_ai_scanner_results`: Scan results and threat data
 - `wp_ai_scanner_config`: Configuration and signature storage
 - `wp_ai_scanner_quarantine`: Quarantined file management
+- `wp_ai_scanner_audit_log`: Security audit trail and activity logging
 
 ### Testing
 
@@ -171,10 +172,12 @@ wp-ai-security-scanner/
 │   ├── sample-threats/           # 12 realistic malware samples
 │   └── docker-compose.yml        # Demo environment
 ├── tests/
-│   ├── test-database.php         # Database tests
-│   ├── test-scanner.php          # Scanner tests
-│   ├── test-malware-detector.php # Detection tests (50+ tests)
-│   ├── test-security-features.php # Security tests
+│   ├── test-database.php         # Database tests (7 tests)
+│   ├── test-scanner.php          # Scanner tests (10 tests)
+│   ├── test-malware-detector.php # Detection tests (29 tests)
+│   ├── test-security-features.php # Security tests (13 tests)
+│   ├── test-enhanced-scanner.php # Enhanced scanner tests (12 tests)
+│   ├── test-admin-api-integration.php # Admin API tests (12 tests)
 │   └── bootstrap.php             # Test bootstrap
 ├── phpunit.xml                   # PHPUnit configuration
 └── README.md                     # This file
@@ -214,16 +217,16 @@ wp-ai-security-scanner/
 
 - **Local processing**: Primary analysis occurs locally for privacy
 - **API Security**: Secure API communications with OpenAI and VirusTotal (optional)
-- **Data Protection**: Encrypted storage of sensitive results and API keys
+- **Data Protection**: AES-256-CBC encryption for API keys with secure key generation
 - **Access Control**: Role-based access control with WordPress capabilities
 - **Input Validation**: Comprehensive sanitization and CSRF protection
-- **Audit Logging**: Complete activity tracking for security events
+- **Audit Logging**: Complete activity tracking for security events (scan events, threats, quarantine actions, settings changes)
 
 ### API Integration Security
 
-- **API Keys**: Stored securely in WordPress options with encryption
-- **Rate Limiting**: Automatic throttling to prevent API abuse
-- **Error Handling**: Graceful degradation when APIs are unavailable
+- **API Keys**: Stored with AES-256-CBC encryption in WordPress options
+- **Rate Limiting**: Automatic throttling (20 req/min OpenAI, 4 req/min VirusTotal)
+- **Error Handling**: Graceful degradation when APIs are unavailable or rate limited
 - **Privacy**: File contents sent to APIs only when locally flagged as suspicious
 - **Validation**: Real-time API key validation and testing
 
@@ -236,6 +239,14 @@ GPL v2 or later
 For technical support or feature requests, please contact the plugin developer.
 
 ## Changelog
+
+### Version 1.1.0
+- Added AES-256-CBC encryption for API key storage
+- Added rate limiting for external API calls
+- Added comprehensive audit logging system
+- Added audit log database table
+- Improved security event tracking
+- Updated test coverage documentation
 
 ### Version 1.0.0
 - Initial release

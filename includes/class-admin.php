@@ -5,13 +5,15 @@ if (!defined('ABSPATH')) {
 }
 
 class WP_AI_Security_Scanner_Admin {
-    
+
     private $database;
     private $scanner;
-    
+    private $security;
+
     public function __construct() {
         $this->database = new WP_AI_Security_Scanner_Database();
         $this->scanner = new WP_AI_Security_Scanner_Scanner();
+        $this->security = new WP_AI_Security_Scanner_Security_Features();
     }
     
     public function display_dashboard() {
@@ -342,6 +344,46 @@ class WP_AI_Security_Scanner_Admin {
     }
     
     private function save_settings() {
+        $old_settings = get_option('wp_ai_security_scanner_settings', array());
+
+        // Get API keys from POST - if empty and we have existing encrypted keys, keep them
+        $openai_key = sanitize_text_field($_POST['openai_api_key']);
+        $virustotal_key = sanitize_text_field($_POST['virustotal_api_key']);
+
+        // Track API key changes for audit logging
+        $openai_changed = false;
+        $virustotal_changed = false;
+
+        // Handle OpenAI API key - encrypt if provided, keep existing if empty
+        if (!empty($openai_key)) {
+            // Check if the key is different from the existing one
+            $existing_openai = isset($old_settings['openai_api_key']) ? $this->security->decrypt($old_settings['openai_api_key']) : '';
+            if ($openai_key !== $existing_openai) {
+                $openai_key = $this->security->encrypt($openai_key);
+                $openai_changed = true;
+            } else {
+                $openai_key = $old_settings['openai_api_key'];
+            }
+        } elseif (isset($old_settings['openai_api_key'])) {
+            // Keep existing encrypted key if no new key provided
+            $openai_key = $old_settings['openai_api_key'];
+        }
+
+        // Handle VirusTotal API key - encrypt if provided, keep existing if empty
+        if (!empty($virustotal_key)) {
+            // Check if the key is different from the existing one
+            $existing_vt = isset($old_settings['virustotal_api_key']) ? $this->security->decrypt($old_settings['virustotal_api_key']) : '';
+            if ($virustotal_key !== $existing_vt) {
+                $virustotal_key = $this->security->encrypt($virustotal_key);
+                $virustotal_changed = true;
+            } else {
+                $virustotal_key = $old_settings['virustotal_api_key'];
+            }
+        } elseif (isset($old_settings['virustotal_api_key'])) {
+            // Keep existing encrypted key if no new key provided
+            $virustotal_key = $old_settings['virustotal_api_key'];
+        }
+
         $settings = array(
             'scan_paths' => array_filter(array_map('trim', explode("\n", $_POST['scan_paths']))),
             'file_extensions' => array_filter(array_map('trim', explode(',', $_POST['file_extensions']))),
@@ -350,13 +392,24 @@ class WP_AI_Security_Scanner_Admin {
             'notification_email' => sanitize_email($_POST['notification_email']),
             'scan_frequency' => sanitize_text_field($_POST['scan_frequency']),
             'use_openai' => isset($_POST['use_openai']),
-            'openai_api_key' => sanitize_text_field($_POST['openai_api_key']),
+            'openai_api_key' => $openai_key,
             'use_virustotal' => isset($_POST['use_virustotal']),
-            'virustotal_api_key' => sanitize_text_field($_POST['virustotal_api_key'])
+            'virustotal_api_key' => $virustotal_key
         );
-        
+
         update_option('wp_ai_security_scanner_settings', $settings);
-        
+
+        // Log settings change
+        $this->security->log_settings_changed($settings);
+
+        // Log API key changes
+        if ($openai_changed) {
+            $this->security->log_api_key_changed('OpenAI', !empty($openai_key));
+        }
+        if ($virustotal_changed) {
+            $this->security->log_api_key_changed('VirusTotal', !empty($virustotal_key));
+        }
+
         wp_clear_scheduled_hook('wp_ai_security_scanner_cron');
         wp_schedule_event(time(), $settings['scan_frequency'], 'wp_ai_security_scanner_cron');
     }

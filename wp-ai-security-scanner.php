@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WordPress AI Security Scanner
  * Description: AI-powered WordPress security scanner with intelligent threat detection and automated remediation
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Daryl Lundy
  * License: GPL v2 or later
  * Text Domain: wp-ai-security-scanner
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('WP_AI_SECURITY_SCANNER_VERSION', '1.0.0');
+define('WP_AI_SECURITY_SCANNER_VERSION', '1.1.0');
 define('WP_AI_SECURITY_SCANNER_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WP_AI_SECURITY_SCANNER_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -238,21 +238,23 @@ class WP_AI_Security_Scanner {
     
     public static function uninstall() {
         global $wpdb;
-        
+
         $tables = array(
             $wpdb->prefix . 'ai_scanner_results',
             $wpdb->prefix . 'ai_scanner_config',
-            $wpdb->prefix . 'ai_scanner_quarantine'
+            $wpdb->prefix . 'ai_scanner_quarantine',
+            $wpdb->prefix . 'ai_scanner_audit_log'
         );
-        
+
         foreach ($tables as $table) {
             $wpdb->query("DROP TABLE IF EXISTS $table");
         }
-        
+
         delete_option('wp_ai_security_scanner_version');
         delete_option('wp_ai_security_scanner_settings');
         delete_option('wp_ai_security_scanner_last_scan');
         delete_option('wp_ai_security_scanner_scan_progress');
+        delete_option('wp_ai_scanner_encryption_key');
     }
 }
 
