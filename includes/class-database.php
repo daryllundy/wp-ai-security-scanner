@@ -56,13 +56,30 @@ class WP_AI_Security_Scanner_Database {
             PRIMARY KEY (id),
             KEY quarantined_at (quarantined_at)
         ) $charset_collate;";
-        
+
+        $sql_audit_log = "CREATE TABLE IF NOT EXISTS {$this->wpdb->prefix}ai_scanner_audit_log (
+            id int(11) NOT NULL AUTO_INCREMENT,
+            event_type varchar(50) NOT NULL,
+            description text NOT NULL,
+            severity enum('info', 'warning', 'error', 'critical') NOT NULL DEFAULT 'info',
+            user_id bigint(20) unsigned DEFAULT NULL,
+            user_ip varchar(45) DEFAULT NULL,
+            metadata longtext DEFAULT NULL,
+            created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY event_type (event_type),
+            KEY severity (severity),
+            KEY user_id (user_id),
+            KEY created_at (created_at)
+        ) $charset_collate;";
+
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        
+
         dbDelta($sql_results);
         dbDelta($sql_config);
         dbDelta($sql_quarantine);
-        
+        dbDelta($sql_audit_log);
+
         $this->insert_default_config();
     }
     
