@@ -79,8 +79,17 @@ else
     docker-compose run --rm wp-cli core install --path=/var/www/html --url="http://localhost:${WEB_PORT}" --title="WordPress AI Security Scanner Demo" --admin_user=admin --admin_password=admin_password_123! --admin_email=admin@demo.local --skip-email --allow-root
 fi
 
-docker-compose run --rm wp-cli plugin activate wp-ai-security-scanner --path=/var/www/html --allow-root
-docker-compose run --rm wp-cli plugin activate clean-demo-plugin --path=/var/www/html --allow-root
+if docker-compose run --rm wp-cli plugin is-active wp-ai-security-scanner --path=/var/www/html --allow-root > /dev/null 2>&1; then
+    echo "✅ wp-ai-security-scanner already active."
+else
+    docker-compose run --rm wp-cli plugin activate wp-ai-security-scanner --path=/var/www/html --allow-root
+fi
+
+if docker-compose run --rm wp-cli plugin is-active clean-demo-plugin --path=/var/www/html --allow-root > /dev/null 2>&1; then
+    echo "✅ clean-demo-plugin already active."
+else
+    docker-compose run --rm wp-cli plugin activate clean-demo-plugin --path=/var/www/html --allow-root
+fi
 
 docker-compose run --rm wp-cli eval '
 $settings = get_option("wp_ai_security_scanner_settings", array());
