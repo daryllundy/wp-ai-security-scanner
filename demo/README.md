@@ -35,6 +35,16 @@ OpenAI and VirusTotal integrations are disabled for this offline demo.
 3. Watch the real-time progress
 4. Review detected threats
 
+### Reset the Demo
+
+If you want a clean slate without rebuilding containers:
+
+```bash
+./reset-demo.sh
+```
+
+This resets the WordPress database and re-runs the automated setup.
+
 ## What's Included
 
 ### Services
@@ -145,6 +155,7 @@ demo/
 ├── uploads.ini            # PHP upload settings
 ├── sample-threats/        # Demo malware files (13 samples)
 ├── start-demo.sh         # Demo startup script
+├── reset-demo.sh         # Demo reset script
 ├── stop-demo.sh          # Demo shutdown script
 └── README.md             # This file
 ```
