@@ -11,6 +11,12 @@ if ! docker info > /dev/null 2>&1; then
     exit 1
 fi
 
+if [ -f .env ]; then
+    set -a
+    . ./.env
+    set +a
+fi
+
 find_free_port() {
     local port=$1
     while lsof -Pi :"$port" -sTCP:LISTEN -t >/dev/null 2>&1; do
@@ -19,17 +25,25 @@ find_free_port() {
     echo "$port"
 }
 
-WEB_PORT=$(find_free_port 8080)
-PMA_PORT=$(find_free_port 8081)
+BASE_WEB_PORT=${WEB_PORT:-8080}
+BASE_PMA_PORT=${PMA_PORT:-8081}
+
+WEB_PORT=$(find_free_port "$BASE_WEB_PORT")
+PMA_PORT=$(find_free_port "$BASE_PMA_PORT")
 export WEB_PORT PMA_PORT
 
-if [ "$WEB_PORT" != "8080" ]; then
-    echo "⚠️  Port 8080 in use; using $WEB_PORT instead."
+if [ "$WEB_PORT" != "$BASE_WEB_PORT" ]; then
+    echo "⚠️  Port $BASE_WEB_PORT in use; using $WEB_PORT instead."
 fi
 
-if [ "$PMA_PORT" != "8081" ]; then
-    echo "⚠️  Port 8081 in use; using $PMA_PORT instead."
+if [ "$PMA_PORT" != "$BASE_PMA_PORT" ]; then
+    echo "⚠️  Port $BASE_PMA_PORT in use; using $PMA_PORT instead."
 fi
+
+WP_ADMIN_USER=${WP_ADMIN_USER:-admin}
+WP_ADMIN_PASSWORD=${WP_ADMIN_PASSWORD:-admin_password_123!}
+WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL:-admin@demo.local}
+WP_SITE_TITLE=${WP_SITE_TITLE:-WordPress AI Security Scanner Demo}
 
 echo "📦 Starting Docker containers..."
 docker-compose up -d
@@ -76,7 +90,7 @@ echo "🛠️  Configuring WordPress with wp-cli..."
 if docker-compose run --rm wp-cli core is-installed --path=/var/www/html --allow-root > /dev/null 2>&1; then
     echo "✅ WordPress already installed."
 else
-    docker-compose run --rm wp-cli core install --path=/var/www/html --url="http://localhost:${WEB_PORT}" --title="WordPress AI Security Scanner Demo" --admin_user=admin --admin_password=admin_password_123! --admin_email=admin@demo.local --skip-email --allow-root
+    docker-compose run --rm wp-cli core install --path=/var/www/html --url="http://localhost:${WEB_PORT}" --title="$WP_SITE_TITLE" --admin_user="$WP_ADMIN_USER" --admin_password="$WP_ADMIN_PASSWORD" --admin_email="$WP_ADMIN_EMAIL" --skip-email --allow-root
 fi
 
 if docker-compose run --rm wp-cli plugin is-active wp-ai-security-scanner --path=/var/www/html --allow-root > /dev/null 2>&1; then

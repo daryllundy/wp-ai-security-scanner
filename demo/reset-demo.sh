@@ -10,12 +10,19 @@ if ! docker info > /dev/null 2>&1; then
     exit 1
 fi
 
+if [ -f .env ]; then
+    set -a
+    . ./.env
+    set +a
+fi
+
 echo "📦 Ensuring Docker containers are running..."
 docker-compose up -d
 
+BASE_WEB_PORT=${WEB_PORT:-8080}
 port_output=$(docker-compose port nginx 80 2>/dev/null)
 if [ -z "$port_output" ]; then
-    WEB_PORT=8080
+    WEB_PORT=$BASE_WEB_PORT
 else
     WEB_PORT=${port_output##*:}
 fi
