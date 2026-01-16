@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WordPress AI Security Scanner
  * Description: AI-powered WordPress security scanner with intelligent threat detection and automated remediation
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Daryl Lundy
  * License: GPL v2 or later
  * Text Domain: wp-ai-security-scanner
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('WP_AI_SECURITY_SCANNER_VERSION', '1.1.0');
+define('WP_AI_SECURITY_SCANNER_VERSION', '1.1.1');
 define('WP_AI_SECURITY_SCANNER_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WP_AI_SECURITY_SCANNER_PLUGIN_URL', plugin_dir_url(__FILE__));
 

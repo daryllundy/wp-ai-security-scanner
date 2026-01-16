@@ -7,7 +7,7 @@ This Docker setup provides a complete WordPress environment for testing and demo
 ### Prerequisites
 
 - Docker and Docker Compose installed
-- Ports 8080 and 8081 available on your system
+- Ports starting at 8080/8081 available (script auto-selects if busy)
 
 ### 1. Start the Demo Environment
 
@@ -16,22 +16,19 @@ cd demo
 ./start-demo.sh
 ```
 
-### 2. Setup WordPress
+### 2. Log In
 
-1. **Open WordPress**: http://localhost:8080
-2. **Complete WordPress installation**:
-   - Site Title: `WordPress AI Security Scanner Demo`
+The startup script installs WordPress, activates the plugin, and configures settings automatically.
+
+1. **Open WordPress**: Use the URL printed in your terminal (default http://localhost:8080)
+2. **Log in** at `/wp-admin`:
    - Username: `admin`
    - Password: `admin_password_123!`
    - Email: `admin@demo.local`
 
-### 3. Activate the Plugin
+OpenAI and VirusTotal integrations are disabled for this offline demo.
 
-1. Go to **Plugins** → **Installed Plugins**
-2. Find "WordPress AI Security Scanner"
-3. Click **Activate**
-
-### 4. Run Your First Scan
+### 3. Run Your First Scan
 
 1. Navigate to **AI Security Scanner** → **Dashboard**
 2. Click **Start Full Scan** or **Quick Scan**
@@ -42,21 +39,22 @@ cd demo
 
 ### Services
 
-- **WordPress 6.7** (PHP 8.2-FPM)
+- **WordPress 6.7** (PHP 8.3-FPM)
 - **MySQL 8.0** database
 - **Nginx** web server
 - **phpMyAdmin** for database management
+- **wp-cli** for automated setup
 
 ### Access Points
 
-- **WordPress Site**: http://localhost:8080
-- **phpMyAdmin**: http://localhost:8081
+- **WordPress Site**: Use URL printed by `start-demo.sh` (default http://localhost:8080)
+- **phpMyAdmin**: Use URL printed by `start-demo.sh` (default http://localhost:8081)
   - Username: `root`
   - Password: `root_password`
 
 ### Demo Malware Files
 
-The environment includes 12 comprehensive sample threat files in `/wp-content/sample-threats/`:
+The environment includes 13 comprehensive sample threat files in `/wp-content/sample-threats/`:
 
 #### Basic Threats
 1. **eval-backdoor.php** - Base64 encoded eval patterns
@@ -67,12 +65,13 @@ The environment includes 12 comprehensive sample threat files in `/wp-content/sa
 6. **wordpress-exploit.php** - WordPress-specific attacks
 7. **obfuscated-malware.php** - Heavy obfuscation techniques
 8. **clean-file.php** - Safe file (should not be detected)
+9. **eicar.php** - Standard EICAR test string (benign)
 
 #### Advanced Threats
-9. **crypto-miner.php** - Comprehensive cryptocurrency mining (CoinHive, WebAssembly, hidden iframes)
-10. **advanced-backdoor.php** - Multi-stage backdoor with 12 evasion techniques
-11. **php-injection-suite.php** - 20 different injection attack vectors
-12. **modern-malware-techniques.php** - Contemporary threats (fileless, anti-sandbox, persistence)
+10. **crypto-miner.php** - Comprehensive cryptocurrency mining (CoinHive, WebAssembly, hidden iframes)
+11. **advanced-backdoor.php** - Multi-stage backdoor with 12 evasion techniques
+12. **php-injection-suite.php** - 20 different injection attack vectors
+13. **modern-malware-techniques.php** - Contemporary threats (fileless, anti-sandbox, persistence)
 
 ## Demo Scenarios
 
@@ -81,7 +80,7 @@ The environment includes 12 comprehensive sample threat files in `/wp-content/sa
 1. Navigate to **AI Security Scanner** → **Dashboard**
 2. Click **Start Full Scan**
 3. **Expected Results**:
-   - 11+ threats detected in `/wp-content/sample-threats/`
+   - 12+ threats detected in `/wp-content/sample-threats/`
    - Various severity levels (Critical, High, Medium, Low)
    - Confidence scores between 0.5-0.95
    - Multiple detection sources (Local, OpenAI, VirusTotal if configured)
@@ -128,7 +127,7 @@ The environment includes 12 comprehensive sample threat files in `/wp-content/sa
 
 1. Go to **AI Security Scanner** → **Settings**
 2. **Configure options**:
-   - Scan paths (add `/wp-content/sample-threats/`)
+   - Scan paths (includes `/wp-content/sample-threats/` by default)
    - File extensions
    - Email notifications
    - Scan frequency
@@ -144,7 +143,7 @@ demo/
 ├── nginx.conf             # Nginx configuration
 ├── default.conf           # Virtual host config
 ├── uploads.ini            # PHP upload settings
-├── sample-threats/        # Demo malware files (12 samples)
+├── sample-threats/        # Demo malware files (13 samples)
 ├── start-demo.sh         # Demo startup script
 ├── stop-demo.sh          # Demo shutdown script
 └── README.md             # This file
@@ -162,7 +161,7 @@ demo/
 - **Internal network**: `wp-network`
 - **WordPress → MySQL**: Port 3306
 - **Nginx → WordPress**: Port 9000 (PHP-FPM)
-- **External access**: Port 8080 (web), 8081 (phpMyAdmin)
+- **External access**: Ports selected by `start-demo.sh` (defaults 8080 for web, 8081 for phpMyAdmin)
 
 ## Advanced Testing
 
@@ -180,7 +179,7 @@ Test AJAX endpoints directly:
 
 ```bash
 # Start scan via curl
-curl -X POST "http://localhost:8080/wp-admin/admin-ajax.php" \
+curl -X POST "http://localhost:<wordpress-port>/wp-admin/admin-ajax.php" \
   -d "action=start_scan&nonce=YOUR_NONCE" \
   -H "Cookie: wordpress_logged_in_cookie=YOUR_COOKIE"
 ```

@@ -2,7 +2,7 @@
 
 **Production-ready WordPress plugin for AI-powered security scanning and threat detection.**
 
-[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/daryllundy/wp-ai-security-scanner/releases/tag/v1.1.0)
+[![Version](https://img.shields.io/badge/version-1.1.1-blue.svg)](https://github.com/daryllundy/wp-ai-security-scanner/releases/tag/v1.1.1)
 [![WordPress](https://img.shields.io/badge/WordPress-5.5%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-777BB4.svg)](https://www.php.net/)
 [![License](https://img.shields.io/badge/license-GPL%20v2-green.svg)](LICENSE)
@@ -17,7 +17,7 @@ An AI-powered WordPress security scanner with intelligent threat detection and a
 
 1. **Download the latest release:**
    - Go to [Releases](https://github.com/daryllundy/wp-ai-security-scanner/releases/latest)
-   - Download `wp-ai-security-scanner-v1.1.0.zip`
+   - Download `wp-ai-security-scanner-v1.1.1.zip`
 
 2. **Install via WordPress Admin:**
    - Log in to your WordPress admin panel
@@ -35,7 +35,7 @@ An AI-powered WordPress security scanner with intelligent threat detection and a
 **Manual Installation:**
 ```bash
 cd /path/to/wordpress/wp-content/plugins/
-unzip wp-ai-security-scanner-v1.1.0.zip
+unzip wp-ai-security-scanner-v1.1.1.zip
 ```
 Then activate through WordPress admin panel.
 
@@ -324,8 +324,8 @@ The plugin is production-ready and suitable for:
 
 **Demo Environment:**
 - Docker-based WordPress installation
-- 12 realistic malware samples for testing
-- Pre-configured demo data
+- 13 realistic malware samples for testing (includes EICAR)
+- Fully automated setup via `demo/start-demo.sh` and wp-cli
 
 ## Contributing & Development
 
@@ -342,12 +342,17 @@ phpunit
 
 # Start demo environment
 cd demo
-docker-compose up -d
+./start-demo.sh
 ```
 
 For detailed algorithm documentation, see [docs/ALGORITHM_DOCUMENTATION.md](docs/ALGORITHM_DOCUMENTATION.md).
 
 ## Changelog
+
+### [Version 1.1.1](https://github.com/daryllundy/wp-ai-security-scanner/releases/tag/v1.1.1) - 2026-01-15
+- 🧪 Added fully automated offline demo with wp-cli setup
+- 🧭 Added dynamic port selection for demo services
+- 🧬 Added EICAR sample to demo dataset
 
 ### [Version 1.1.0](https://github.com/daryllundy/wp-ai-security-scanner/releases/tag/v1.1.0) - 2025-12-08
 - ✨ Added AES-256-CBC encryption for API key storage
@@ -367,6 +372,6 @@ For detailed algorithm documentation, see [docs/ALGORITHM_DOCUMENTATION.md](docs
 
 ## Download
 
-**Latest Release:** [v1.1.0](https://github.com/daryllundy/wp-ai-security-scanner/releases/tag/v1.1.0)
+**Latest Release:** [v1.1.1](https://github.com/daryllundy/wp-ai-security-scanner/releases/tag/v1.1.1)
 
-Download the production-ready plugin: [wp-ai-security-scanner-v1.1.0.zip](https://github.com/daryllundy/wp-ai-security-scanner/releases/download/v1.1.0/wp-ai-security-scanner-v1.1.0.zip)
+Download the production-ready plugin: [wp-ai-security-scanner-v1.1.1.zip](https://github.com/daryllundy/wp-ai-security-scanner/releases/download/v1.1.1/wp-ai-security-scanner-v1.1.1.zip)
