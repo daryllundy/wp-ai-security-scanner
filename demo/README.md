@@ -62,6 +62,10 @@ This resets the WordPress database and re-runs the automated setup.
   - Username: `root`
   - Password: `root_password`
 
+### Clean Reference Plugin
+
+A safe reference plugin is preloaded and activated at `wp-content/plugins/clean-demo-plugin/`.
+
 ### Demo Malware Files
 
 The environment includes 13 comprehensive sample threat files in `/wp-content/sample-threats/`:
@@ -162,6 +166,7 @@ demo/
 ├── nginx.conf             # Nginx configuration
 ├── default.conf           # Virtual host config
 ├── uploads.ini            # PHP upload settings
+├── clean-plugin/          # Safe demo plugin
 ├── sample-threats/        # Demo malware files (13 samples)
 ├── start-demo.sh         # Demo startup script
 ├── reset-demo.sh         # Demo reset script
@@ -172,6 +177,7 @@ demo/
 ### Volume Mounts
 
 - **Plugin Code**: `../` → `/var/www/html/wp-content/plugins/wp-ai-security-scanner`
+- **Clean Plugin**: `./clean-plugin/` → `/var/www/html/wp-content/plugins/clean-demo-plugin`
 - **Sample Threats**: `./sample-threats/` → `/var/www/html/wp-content/sample-threats`
 - **WordPress Data**: `wordpress_data` volume
 - **MySQL Data**: `mysql_data` volume

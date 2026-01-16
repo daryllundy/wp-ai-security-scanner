@@ -32,6 +32,7 @@ echo "🛠️  Reinstalling WordPress..."
 docker-compose run --rm wp-cli core install --path=/var/www/html --url="http://localhost:${WEB_PORT}" --title="$WP_SITE_TITLE" --admin_user="$WP_ADMIN_USER" --admin_password="$WP_ADMIN_PASSWORD" --admin_email="$WP_ADMIN_EMAIL" --skip-email --allow-root
 
 docker-compose run --rm wp-cli plugin activate wp-ai-security-scanner --path=/var/www/html --allow-root
+docker-compose run --rm wp-cli plugin activate clean-demo-plugin --path=/var/www/html --allow-root
 
 docker-compose run --rm wp-cli eval '
 $settings = get_option("wp_ai_security_scanner_settings", array());
