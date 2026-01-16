@@ -9,6 +9,14 @@ This Docker setup provides a complete WordPress environment for testing and demo
 - Docker and Docker Compose installed
 - Ports starting at 8080/8081 available (script auto-selects if busy)
 
+### Optional: Override Defaults
+
+Copy `.env.example` to `.env` to override ports or admin credentials:
+
+```bash
+cp .env.example .env
+```
+
 ### 1. Start the Demo Environment
 
 ```bash
@@ -166,6 +174,7 @@ demo/
 ├── nginx.conf             # Nginx configuration
 ├── default.conf           # Virtual host config
 ├── uploads.ini            # PHP upload settings
+├── .env.example           # Optional overrides
 ├── clean-plugin/          # Safe demo plugin
 ├── sample-threats/        # Demo malware files (13 samples)
 ├── start-demo.sh         # Demo startup script
