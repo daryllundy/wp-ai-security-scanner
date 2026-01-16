@@ -85,6 +85,15 @@ The environment includes 13 comprehensive sample threat files in `/wp-content/sa
 
 ## Demo Scenarios
 
+### Guided Demo Checklist
+
+1. Log in to `/wp-admin` and open **AI Security Scanner** → **Dashboard**.
+2. Run a **Quick Scan** to show immediate detections.
+3. Open **Scan Results** and click **View** on a critical threat.
+4. Quarantine one high-severity file and confirm its status.
+5. Navigate to **Settings** and review scan paths and notifications.
+6. Return to the dashboard and start a **Full Scan** for the long-form demo.
+
 ### Scenario 1: Basic Threat Detection
 
 1. Navigate to **AI Security Scanner** → **Dashboard**
